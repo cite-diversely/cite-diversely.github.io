@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+
+    <title>Check Reference Diversity</title>
+</head>
+<body>
+
+<div class="container mt-5 mb-5">
+    <form>
+        <div class="form-group">
+            <label for="abstract">Abstract</label>
+            <textarea class="form-control" id="abstract" rows="20"
+                      placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+        </div>
+
+        <button id="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+<script>
+    function commit_to_github(event) {
+        event.preventDefault();
+
+        // Get the details
+        let abstract = $("#abstract").val();
+
+        // Check encoding
+
+        $.ajax({
+            url: 'https://cmccomb-reference-diversity-1.glitch.me/',
+            type: "POST",
+            data: {bib: abstract},
+            success: function (results) {
+                $(".container").prepend("<div class=\"alert alert-success alert-dismissible\">\n" +
+                    "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
+                    "    <strong>Success!</strong> A new publication was successfully added to the website.\n" +
+                    "  </div>");
+
+                $("#abstract").val("");
+            },
+            error: function (results) {
+                $(".container").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
+                    "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
+                    "    <strong>Oops!</strong> There was an issues adding this publication to the website.\n" +
+                    "  </div>");
+            }
+        });
+
+    }
+
+    $("#submit").on('click', commit_to_github)
+
+</script>
+
+</body>
+</html>
