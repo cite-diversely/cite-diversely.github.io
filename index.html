@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title>Check Reference Diversity</title>
 </head>
 <body>
@@ -24,6 +24,11 @@
 
         <button id="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <div>
+        <div id="gender_piechart" style="width: 900px; height: 500px;"></div>
+        <div id="ethnicity_piechart" style="width: 900px; height: 500px;"></div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
@@ -35,6 +40,50 @@
         integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
 <script>
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawCharts);
+
+    function drawCharts(results) {
+        results = JSON.parse(results);
+        console.log(results)
+        var gender_data = google.visualization.arrayToDataTable([
+            ['Gender', 'Count'],
+            ['Very Likely Male', results.male],
+            ['Likely Male', results.mostly_male],
+            ['Gender Neutral', results.andy],
+            ['Likely Female', results.mostly_female],
+            ['Very Likely Female', results.female],
+            ['Unknown', results.unknown]
+        ]);
+
+        var gender_options = {
+            title: 'Gender Composition of References'
+        };
+
+        var gender_chart = new google.visualization.PieChart(document.getElementById('gender_piechart'));
+        gender_chart.draw(gender_data, gender_options);
+
+        var ethnicity_data = google.visualization.arrayToDataTable([
+            ['Ethnicity', 'Count'],
+            ['White', results.pctwhite],
+            ['Black', results.pctblack],
+            ['Asian or Pacific Islander', results.pctapi],
+            ['American Indian or Alaskan Native', results.pctaian],
+            ['Multiple Races', results.pct2prace],
+            ['Hispanic', results.pcthispanic],
+            ['Unknown', results.race_unknown]
+        ]);
+
+        var ethnicity_options = {
+            title: 'Race/Ethnicity Composition of References'
+        };
+
+
+        var ethnicity_chart = new google.visualization.PieChart(document.getElementById('ethnicity_piechart'));
+        ethnicity_chart.draw(ethnicity_data, ethnicity_options);
+    }
+
     function get_data(event) {
         event.preventDefault();
 
@@ -54,6 +103,8 @@
                     "  </div>");
 
                 $("#abstract").val("");
+
+                drawCharts(results)
             },
             error: function (results) {
                 $(".container").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
