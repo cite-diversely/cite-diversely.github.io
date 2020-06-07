@@ -35,7 +35,7 @@
         integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
 <script>
-    function commit_to_github(event) {
+    function get_data(event) {
         event.preventDefault();
 
         // Get the details
@@ -65,7 +65,7 @@
 
     }
 
-    $("#submit").on('click', commit_to_github)
+    $("#submit").on('click', get_data)
 
 </script>
 
