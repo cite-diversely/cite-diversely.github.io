@@ -15,20 +15,55 @@
 <body>
 
 <div class="container mt-5 mb-5">
+    <p>Copy and paste the contents of your bibtex file below and we will do our best to evaluate the gender and ethnicity of the people you cite. Note that this is a best guess only, and is no replacement for truly being diligent and active in citing diverse voices. To learn more about your duty to dismantle instituional oppression through your citation practices, read up here:</p>
+    <ul>
+        <li><a href="https://www.citeblackwomencollective.org">Cite Black Women</a></li>
+        <li><a href="https://www.insidehighered.com/advice/2018/04/27/racial-exclusions-scholarly-citations-opinion">The Racial Politics of Citation</a></li>
+    </ul>
+    <p>If you don't directly use LaTeX, you can still export a bibtex file. There are instructions on how to do so for <a href="https://blog.mendeley.com/2011/10/25/howto-use-mendeley-to-create-citations-using-latex-and-bibtex/">Mendeley</a>, <a href="https://libguides.usask.ca/c.php?g=218034&p=1458583">EndNote</a>, and <a href="https://libguides.usask.ca/c.php?g=218034&p=1446406">Zotero</a>.</p>
+    <p>To infer gender we use the first names of the authors you cite and run them through <a href="https://pypi.org/project/gender-guesser/">this library</a>, which is admittedly Euro-centric. To infer ethnicity we do a lookup by last name using the <a href="https://www.census.gov/data/developers/data-sets/surnames.html">2010 US census data</a>.</p>
+    <p>Common reasons why authors are placed in the "unable to determine" category include: uncommon last name (fewer than 100 instances in the 2010 US Census), and first names in your bibtex are initials only.</p>
     <form>
         <div class="form-group">
-            <label for="abstract">Abstract</label>
             <textarea class="form-control" id="abstract" rows="20"
-                      placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+                      placeholder="@article{Raina2019,
+    author = {Raina, Ayush and McComb, Christopher and Cagan, Jonathan},
+    title = {Learning to Design From Humans: Imitating Human Designers Through Deep Learning},
+    journal = {Journal of Mechanical Design},
+    volume = {141},
+    number = {11},
+    year = {2019},
+    month = {09},
+    issn = {1050-0472},
+    doi = {10.1115/1.4044256}
+}
+
+@article{Williams2019,
+    author = {Williams, Glen and Meisel, Nicholas A. and Simpson, Timothy W. and McComb, Christopher},
+    title = {Design Repository Effectiveness for 3D Convolutional Neural Networks: Application to Additive Manufacturing},
+    journal = {Journal of Mechanical Design},
+    volume = {141},
+    number = {11},
+    year = {2019},
+    month = {09},
+    issn = {1050-0472},
+    doi = {10.1115/1.4044199}
+}
+"></textarea>
         </div>
 
         <button id="submit" class="btn btn-primary">Submit</button>
     </form>
 
-    <div>
-        <div id="gender_piechart" style="width: 900px; height: 500px;"></div>
-        <div id="ethnicity_piechart" style="width: 900px; height: 500px;"></div>
+
+    <div class="row" style="height: 500px;">
+        <p></p>
+        <div id="gender_piechart" class="col"></div>
     </div>
+    <div class="row" style="height: 500px;">
+        <div id="ethnicity_piechart" class="col"></div>
+    </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
@@ -41,8 +76,14 @@
         crossorigin="anonymous"></script>
 <script>
 
+    // Set the default text
+    var textAreas = document.getElementsByTagName('textarea');
+
+    Array.prototype.forEach.call(textAreas, function(elem) {
+        elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+    });
+
     google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawCharts);
 
     function drawCharts(results) {
         results = JSON.parse(results);
@@ -51,10 +92,10 @@
             ['Gender', 'Count'],
             ['Very Likely Male', results.male],
             ['Likely Male', results.mostly_male],
-            ['Gender Neutral', results.andy],
+            ['Hard To Tell', results.andy],
             ['Likely Female', results.mostly_female],
             ['Very Likely Female', results.female],
-            ['Unknown', results.unknown]
+            ['Unable to determine', results.unknown]
         ]);
 
         var gender_options = {
@@ -72,7 +113,7 @@
             ['American Indian or Alaskan Native', results.pctaian],
             ['Multiple Races', results.pct2prace],
             ['Hispanic', results.pcthispanic],
-            ['Unknown', results.race_unknown]
+            ['Unable to determine', results.race_unknown]
         ]);
 
         var ethnicity_options = {
@@ -99,17 +140,15 @@
             success: function (results) {
                 $(".container").prepend("<div class=\"alert alert-success alert-dismissible\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Success!</strong> A new publication was successfully added to the website.\n" +
+                    "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
                     "  </div>");
-
-                $("#abstract").val("");
 
                 drawCharts(results)
             },
             error: function (results) {
                 $(".container").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Oops!</strong> There was an issues adding this publication to the website.\n" +
+                    "    <strong>Oops!</strong> Something went wrong.\n" +
                     "  </div>");
             }
         });
