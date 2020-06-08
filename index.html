@@ -6,27 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <title>Check Reference Diversity</title>
+    <title>Cite Diversely</title>
 </head>
 <body>
 
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Cite Diversely</h1>
+        <p class="lead">Estimate the diversity of the references you use</p>
+    </div>
+</div>
+
 <div class="container mt-5 mb-5">
-    <p>Copy and paste the contents of your bibtex file below and we will do our best to evaluate the gender and ethnicity of the people you cite. Note that this is a best guess only, and is no replacement for truly being diligent and active in citing diverse voices. To learn more about your duty to dismantle instituional oppression through your citation practices, read up here:</p>
+    <h2>About</h2>
+    <p>To learn more about your duty to dismantle instituional oppression through your citation practices, read up here:</p>
     <ul>
         <li><a href="https://www.citeblackwomencollective.org">Cite Black Women</a></li>
         <li><a href="https://www.insidehighered.com/advice/2018/04/27/racial-exclusions-scholarly-citations-opinion">The Racial Politics of Citation</a></li>
     </ul>
-    <p>If you don't directly use LaTeX, you can still export a bibtex file. There are instructions on how to do so for <a href="https://blog.mendeley.com/2011/10/25/howto-use-mendeley-to-create-citations-using-latex-and-bibtex/">Mendeley</a>, <a href="https://libguides.usask.ca/c.php?g=218034&p=1458583">EndNote</a>, and <a href="https://libguides.usask.ca/c.php?g=218034&p=1446406">Zotero</a>.</p>
-    <p>To infer gender we use the first names of the authors you cite and run them through <a href="https://pypi.org/project/gender-guesser/">this library</a>, which is admittedly Euro-centric. To infer ethnicity we do a lookup by last name using the <a href="https://www.census.gov/data/developers/data-sets/surnames.html">2010 US census data</a>.</p>
-    <p>Common reasons why authors are placed in the "unable to determine" category include: uncommon last name (fewer than 100 instances in the 2010 US Census), and first names in your bibtex are initials only.</p>
+    <p>Copy and paste the contents of your bibtex file below and we will do our best to evaluate the gender and ethnicity of the people you cite. Note that this is a best guess only, and is no replacement for truly being diligent and active in citing diverse voices.</p>
+</div>
+<div class="container mt-5 mb-5" id="thetool">
+    <h2>Evaluate</h2>
     <form>
         <div class="form-group">
+            <label for="abstract"></label>
             <textarea class="form-control" id="abstract" rows="20"
-                      placeholder="@article{Raina2019,
+                                                    placeholder="@article{Raina2019,
     author = {Raina, Ayush and McComb, Christopher and Cagan, Jonathan},
     title = {Learning to Design From Humans: Imitating Human Designers Through Deep Learning},
     journal = {Journal of Mechanical Design},
@@ -56,24 +75,62 @@
     </form>
 
 
-    <div class="row" style="height: 500px;">
-        <p></p>
+    <div class="row">
         <div id="gender_piechart" class="col"></div>
     </div>
-    <div class="row" style="height: 500px;">
+    <div class="row">
         <div id="ethnicity_piechart" class="col"></div>
     </div>
-
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
+<div class="container mt-5 mb-5">
+    <h2>Frequently Asked Questions</h2>
+
+    <div id="accordion">
+
+        <div class="card">
+            <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                    Can I still use this even if I don't use LaTeX?
+                </a>
+            </div>
+            <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                    If you don't directly use LaTeX, you can still export a bibtex file. There are instructions on how to do so for <a href="https://blog.mendeley.com/2011/10/25/howto-use-mendeley-to-create-citations-using-latex-and-bibtex/">Mendeley</a>, <a href="https://libguides.usask.ca/c.php?g=218034&p=1458583">EndNote</a>, and <a href="https://libguides.usask.ca/c.php?g=218034&p=1446406">Zotero</a>.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                    Why are so many of my references in the "unable to determine" category?
+                </a>
+            </div>
+            <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                <div class="card-body">
+                    Some common reasons why authors are placed in the "unable to determine" category include: uncommon last name (fewer than 100 instances in the 2010 US Census), and first names in your bibtex are initials only.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                    How does this actually work?
+                </a>
+            </div>
+            <div id="collapseThree" class="collapse" data-parent="#accordion">
+                <div class="card-body">
+                    To infer gender we use the first names of the authors you cite and run them through <a href="https://pypi.org/project/gender-guesser/">this library</a>, which is admittedly Euro-centric. To infer ethnicity we do a lookup by last name using the <a href="https://www.census.gov/data/developers/data-sets/surnames.html">2010 US census data</a>. The backend calculations are all done with <a href="https://glitch.com/edit/#!/cite-diversely?">this Glitch project</a>, the code is hosted in <a href="https://github.com/cmccomb/cite-diversely-backend">this GitHub repo</a>, and this site is hosted in <a href="https://github.com/cmccomb/cite-diversely">this Github repo</a>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
 <script>
 
     // Set the default text
@@ -107,19 +164,18 @@
 
         var ethnicity_data = google.visualization.arrayToDataTable([
             ['Ethnicity', 'Count'],
-            ['White', results.pctwhite],
-            ['Black', results.pctblack],
-            ['Asian or Pacific Islander', results.pctapi],
-            ['American Indian or Alaskan Native', results.pctaian],
-            ['Multiple Races', results.pct2prace],
-            ['Hispanic', results.pcthispanic],
+            ['Likely White', results.pctwhite],
+            ['Likely Black', results.pctblack],
+            ['Likely Asian or Pacific Islander', results.pctapi],
+            ['Likely American Indian or Alaskan Native', results.pctaian],
+            ['Likely Multiple Races', results.pct2prace],
+            ['Likely Hispanic', results.pcthispanic],
             ['Unable to determine', results.race_unknown]
         ]);
 
         var ethnicity_options = {
             title: 'Race/Ethnicity Composition of References'
         };
-
 
         var ethnicity_chart = new google.visualization.PieChart(document.getElementById('ethnicity_piechart'));
         ethnicity_chart.draw(ethnicity_data, ethnicity_options);
@@ -134,11 +190,11 @@
         // Check encoding
 
         $.ajax({
-            url: 'https://cmccomb-reference-diversity-1.glitch.me/',
+            url: 'https://cite-diversely.glitch.me',
             type: "POST",
             data: {bib: abstract},
             success: function (results) {
-                $(".container").prepend("<div class=\"alert alert-success alert-dismissible\">\n" +
+                $("#thetool").prepend("<div class=\"alert alert-success alert-dismissible\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
                     "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
                     "  </div>");
@@ -146,7 +202,7 @@
                 drawCharts(results)
             },
             error: function (results) {
-                $(".container").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
+                $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
                     "    <strong>Oops!</strong> Something went wrong.\n" +
                     "  </div>");
