@@ -159,16 +159,15 @@
         console.log(results)
         var gender_data = google.visualization.arrayToDataTable([
             ['Gender', 'Count'],
-            ['Very Likely Male', results.male],
-            ['Likely Male', results.mostly_male],
+            ['Likely Male', results.male + results.mostly_male],
             ['Hard To Tell', results.andy],
-            ['Likely Female', results.mostly_female],
-            ['Very Likely Female', results.female],
+            ['Likely Female', results.female + results.mostly_female],
             ['Unable to determine', results.unknown]
         ]);
 
         var gender_options = {
-            title: 'Gender Composition of References'
+            title: 'Gender Composition of References',
+            pieHole: 0.4
         };
 
         var gender_chart = new google.visualization.PieChart(document.getElementById('gender_piechart'));
@@ -186,7 +185,8 @@
         ]);
 
         var ethnicity_options = {
-            title: 'Race/Ethnicity Composition of References'
+            title: 'Race/Ethnicity Composition of References',
+            pieHole: 0.4
         };
 
         var ethnicity_chart = new google.visualization.PieChart(document.getElementById('ethnicity_piechart'));
@@ -199,8 +199,6 @@
         // Get the details
         let abstract = $("#abstract").val();
 
-        // Check encoding
-
         $.ajax({
             url: 'https://cite-diversely.glitch.me',
             type: "POST",
@@ -211,7 +209,15 @@
                     "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
                     "  </div>");
 
-                drawCharts(results)
+                $("#gender_piechart").height(400);
+                $("#ethnicity_piechart").height(400);
+
+                $("#thetool")[0].scrollIntoView({
+                    behavior: "smooth", // or "auto" or "instant"
+                    block: "end" // or "end"
+                });
+
+                drawCharts(results);
             },
             error: function (results) {
                 $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
