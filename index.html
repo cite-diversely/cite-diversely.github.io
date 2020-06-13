@@ -26,16 +26,37 @@
         body.busy .spinner { display:inline-block !important; }
     </style>
 </head>
-<body>
+<body data-spy="scroll" data-target=".navpills" data-offset="100">
 
-<div class="jumbotron jumbotron-fluid">
+<!--<nav class="navpills nav-justified sticky-top navbar-expand-lg navbar-dark bg-dark">-->
+<!--        <ul class="navbar-nav mr-auto justify-content-center">-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#home">Home</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#why">Why?</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#thetool">Estimate</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#faq">FAQ</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#contribute">Contribute</a>-->
+<!--            </li>-->
+
+<!--        </ul>-->
+<!--</nav>-->
+
+<div id="home" class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Cite Diversely</h1>
         <p class="lead">Estimate the diversity of the references you use</p>
     </div>
 </div>
 
-<div class="container mt-5 mb-5">
+<div id="why" class="container mt-5 mb-5">
     <h2>Why Is This Important?</h2>
     <p>Simply put, many people often cite people that are like them. This is a problem because academia has historically been white male dominated, leading to the suppression of marginalized voices. If your citations are biased towards people who look like you, then you are missing out on high-quality work.</p>
     <p>Its important to note that using this site is not a replacement for truly being diligent and engaged in citing diverse voices. Rather, this site is just a place to start, and hopefully the first step in your journey of citing more diversely. To learn more about your duty to dismantle institutional oppression through your citation practices, read up here:</p>
@@ -46,7 +67,7 @@
     </ul>
 </div>
 
-<div class="container mt-5 mb-5" id="thetool" onload="draw_blanks()">
+<div class="container mt-5 mb-5" id="thetool">
     <h2>Evaluate Your References</h2>
     <p>Copy and paste the contents of your bibtex file below and we will do our best to evaluate the gender and ethnicity of the people you cite (note that this is a best guess only).</p>
     <form>
@@ -96,7 +117,7 @@
     </div>
 </div>
 
-<div class="container mt-5 mb-5">
+<div id="faq" class="container mt-5 mb-5">
     <h2>Frequently Asked Questions</h2>
 
     <div id="accordion">
@@ -145,7 +166,7 @@
 
 </div>
 
-<div class="container mt-5 mb-5">
+<div id="contribute" class="container mt-5 mb-5">
     <h2>Contribute</h2>
     <p>Do you want to help out? <a href="mailto:mccomb@psu.edu">Send me an email</a> or contribute to the <a href="https://github.com/cmccomb/cite-diversely-backend">backend</a> or <a href="https://github.com/cmccomb/cite-diversely">frontend</a> on GitHub.</p>
 
@@ -302,14 +323,12 @@
                 $("#gender_piechart").height(400);
                 $("#ethnicity_piechart").height(400);
 
-
-                $("#thetool")[0].scrollIntoView({
-                    behavior: "smooth", // or "auto" or "instant"
-                    block: "end" // or "end"
-                });
+                $('html, body').animate({
+                    scrollTop: $('#gender_piechart').offset().top
+                }, 500);
 
                 drawCharts(results);
-                // drawTable(results);
+                drawTable(results);
             },
             error: function (results) {
                 $('#submit').prop('disabled', false);
