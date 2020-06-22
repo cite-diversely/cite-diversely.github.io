@@ -308,14 +308,14 @@
         let abstract = $("#abstract").val();
 
         $.ajax({
-            url: 'https://cite-diversely.glitch.me',
+            url: 'http://citediversely-env.eba-irz2e2q3.us-east-1.elasticbeanstalk.com/',
             type: "POST",
             data: {bib: abstract},
             success: function (results) {
                 $('#submit').prop('disabled', false);
                 $('body').removeClass('busy');
 
-                $("#thetool").prepend("<div class=\"alert alert-success alert-dismissible\">\n" +
+                $("#thetool").prepend("<div class=\"alert alert-success alert-dismissible fixed-top\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
                     "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
                     "  </div>");
@@ -334,9 +334,9 @@
                 $('#submit').prop('disabled', false);
                 $('body').removeClass('busy');
 
-                $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible\">\n" +
+                $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible fixed-top\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Oops!</strong> Something went wrong.\n" +
+                    "    <strong>Oops!</strong> Something went wrong.\n<code>" + err.message + "</code>" +
                     "  </div>");
             }
         });
