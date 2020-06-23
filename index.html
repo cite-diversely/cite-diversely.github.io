@@ -308,7 +308,8 @@
         let abstract = $("#abstract").val();
 
         $.ajax({
-            url: 'https://citediversely-env.eba-irz2e2q3.us-east-1.elasticbeanstalk.com/',
+            // url: 'https://citediversely-env.eba-irz2e2q3.us-east-1.elasticbeanstalk.com/',
+            url: 'https://cite-diversely.glitch.me/',
             type: "POST",
             data: {bib: abstract},
             success: function (results) {
@@ -336,7 +337,7 @@
 
                 $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible fixed-top\">\n" +
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Oops!</strong> Something went wrong.\n<code>" + results + "</code>" +
+                    "    <strong>Oops!</strong> Something went wrong.\n<code>" + JSON.stringify(results) + "</code>" +
                     "  </div>");
             }
         });
