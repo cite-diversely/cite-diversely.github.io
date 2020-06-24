@@ -307,9 +307,15 @@
         // Get the details
         let abstract = $("#abstract").val();
 
+        let url_to_call = ''
+        if (location.hostname === "localhost") {
+            url_to_call = 'http://localhost:7071/api/HttpTrigger1';
+        } else {
+            url_to_call = 'https://cite-diversely.azurewebsites.net/api/HttpTrigger1?code=zAcXELp0HdNQ0b2opMuc//d5CjTu297bQU2dyJnYaIYdaYDP3XVipg==';
+        }
+
         $.ajax({
-            // url: 'http://localhost:7071/api/HttpTrigger1',
-            url: 'https://cite-diversely.azurewebsites.net/api/HttpTrigger1?code=zAcXELp0HdNQ0b2opMuc//d5CjTu297bQU2dyJnYaIYdaYDP3XVipg==',
+            url: url_to_call,
             type: "POST",
             data: '{name: "' + abstract + '"}',
             // data: {name: abstract},
@@ -321,6 +327,12 @@
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
                     "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
                     "  </div>");
+
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove();
+                    });
+                }, 2000);
 
                 $("#gender_piechart").height(400);
                 $("#ethnicity_piechart").height(400);
