@@ -173,7 +173,7 @@
 </div>
 
 <footer class="page-footer font-small text-center py-3 text-light bg-dark">
-    © 2020 Chris McComb, powered by GitHub and Glitch.
+    © 2020 Chris McComb, powered by GitHub and Azure.
 </footer>
 
 <script>
@@ -308,10 +308,11 @@
         let abstract = $("#abstract").val();
 
         $.ajax({
-            // url: 'https://citediversely-env.eba-irz2e2q3.us-east-1.elasticbeanstalk.com/',
-            url: 'https://cite-diversely.glitch.me/',
+            // url: 'http://localhost:7071/api/HttpTrigger1',
+            url: 'https://cite-diversely.azurewebsites.net/api/HttpTrigger1?code=zAcXELp0HdNQ0b2opMuc//d5CjTu297bQU2dyJnYaIYdaYDP3XVipg==',
             type: "POST",
-            data: {bib: abstract},
+            data: '{name: "' + abstract + '"}',
+            // data: {name: abstract},
             success: function (results) {
                 $('#submit').prop('disabled', false);
                 $('body').removeClass('busy');
@@ -327,6 +328,8 @@
                 $('html, body').animate({
                     scrollTop: $('#gender_piechart').offset().top
                 }, 500);
+
+                console.log(results)
 
                 drawCharts(results);
                 drawTable(results);
