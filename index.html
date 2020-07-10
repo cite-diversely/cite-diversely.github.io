@@ -275,19 +275,27 @@
 
         // Make table contents
         for (let idx = 0; idx < results.last_name.length; idx++) {
-            let row_class = 'default';
-            if (results.most_likely_gender[idx] === 'Unable to Determine' && results.most_likely_race[idx] === 'Unable to Determine' ) {
-                row_class='table-danger';
-            } else if (results.most_likely_gender[idx] === 'Unable to Determine' || results.most_likely_race[idx] === 'Unable to Determine' ) {
-                row_class='table-warning';
+            let race_cell_class = 'default';
+            let gender_cell_class = 'default';
+            if (results.most_likely_gender[idx] === 'Unable to Determine') {
+                gender_cell_class ='table-warning';
             }
 
-            table = table + '<tr class="' + row_class + '">' +
+            if (results.most_likely_race[idx] === 'Unable to Determine' ) {
+                race_cell_class ='table-warning';
+            }
+
+            if (results.most_likely_gender[idx] === 'Unable to Determine' && results.most_likely_race[idx] === 'Unable to Determine' ) {
+                race_cell_class ='table-danger';
+                gender_cell_class ='table-danger';
+            }
+
+                table = table + '<tr class="default">' +
                 '<th scope="row">' + (idx+1) + '</th>' +
                 '<td>' + results.first_name[idx] + '</td>' +
                 '<td>' + results.last_name[idx] + '</td>' +
-                '<td>' + results.most_likely_race[idx] + '</td>' +
-                '<td>' + results.most_likely_gender[idx] + '</td>' +
+                '<td class="' + race_cell_class + '">' + results.most_likely_race[idx] + '</td>' +
+                '<td class="' + gender_cell_class + '">' + results.most_likely_gender[idx] + '</td>' +
                 '</tr>'
         }
 
@@ -317,8 +325,8 @@
         $.ajax({
             url: url_to_call,
             type: "POST",
-            data: '{name: "' + abstract + '"}',
-            // data: {name: abstract},
+            // data: '{name: "' + abstract + '"}',
+            data: abstract,
             success: function (results) {
                 $('#submit').prop('disabled', false);
                 $('body').removeClass('busy');
