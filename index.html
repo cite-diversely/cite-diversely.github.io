@@ -73,31 +73,7 @@
     <form>
         <div class="form-group">
             <label for="abstract"></label>
-            <textarea class="form-control" id="abstract" rows="20"
-                                                    placeholder="@article{Raina2019,
-    author = {Raina, Ayush and McComb, Christopher and Cagan, Jonathan},
-    title = {Learning to Design From Humans: Imitating Human Designers Through Deep Learning},
-    journal = {Journal of Mechanical Design},
-    volume = {141},
-    number = {11},
-    year = {2019},
-    month = {09},
-    issn = {1050-0472},
-    doi = {10.1115/1.4044256}
-}
-
-@article{Williams2019,
-    author = {Williams, Glen and Meisel, Nicholas A. and Simpson, Timothy W. and McComb, Christopher},
-    title = {Design Repository Effectiveness for 3D Convolutional Neural Networks: Application to Additive Manufacturing},
-    journal = {Journal of Mechanical Design},
-    volume = {141},
-    number = {11},
-    year = {2019},
-    month = {09},
-    issn = {1050-0472},
-    doi = {10.1115/1.4044199}
-}
-"></textarea>
+            <textarea class="form-control" id="abstract" rows="20"></textarea>
         </div>
 
         <button id="submit" class="btn btn-primary">
@@ -181,9 +157,29 @@
     // Set the default text
     var textAreas = document.getElementsByTagName('textarea');
 
-    Array.prototype.forEach.call(textAreas, function(elem) {
-        elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
-    });
+    textAreas[0].value = "@article{Raina2019,\n" +
+        "    author = {Raina, Ayush and McComb, Christopher and Cagan, Jonathan},\n" +
+        "    title = {Learning to Design From Humans: Imitating Human Designers Through Deep Learning},\n" +
+        "    journal = {Journal of Mechanical Design},\n" +
+        "    volume = {141},\n" +
+        "    number = {11},\n" +
+        "    year = {2019},\n" +
+        "    month = {09},\n" +
+        "    issn = {1050-0472},\n" +
+        "    doi = {10.1115/1.4044256}\n" +
+        "}\n" +
+        "\n" +
+        "@article{Williams2019,\n" +
+        "    author = {Williams, Glen and Meisel, Nicholas A. and Simpson, Timothy W. and McComb, Christopher},\n" +
+        "    title = {Design Repository Effectiveness for 3D Convolutional Neural Networks: Application to Additive Manufacturing},\n" +
+        "    journal = {Journal of Mechanical Design},\n" +
+        "    volume = {141},\n" +
+        "    number = {11},\n" +
+        "    year = {2019},\n" +
+        "    month = {09},\n" +
+        "    issn = {1050-0472},\n" +
+        "    doi = {10.1115/1.4044199}\n" +
+        "}\n"
 
     google.charts.load('current', {'packages':['corechart']});
 
@@ -362,6 +358,12 @@
                     "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
                     "    <strong>Oops!</strong> Something went wrong.\n<code>" + JSON.stringify(results) + "</code>" +
                     "  </div>");
+
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove();
+                    });
+                }, 10000);
             }
         });
 
