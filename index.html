@@ -155,7 +155,10 @@
     © 2020 Chris McComb, powered by GitHub and Azure.
 </footer>
 
+
 <script>
+
+    let full_results = [];
 
     // Set the default text
     var textAreas = document.getElementsByTagName('textarea');
@@ -186,15 +189,60 @@
 
     google.charts.load('current', {'packages':['corechart']});
 
-    function drawCharts(results) {
-        console.log(results)
-        console.log(results.male)
+    function drawCharts(full_results) {
+        let results = {male: 0, andy: 0, female: 0, gender_unknown: 0, white: 0, black: 0, api: 0, aian: 0, multi:0 , hispanic: 0, race_unknown: 0}
+        for (let idx = 0; idx < full_results.length; idx++) {
+            if (full_results[idx].gender === 'male' || full_results[idx].gender === 'mostly_male') {
+                results.male += 1;
+            }
+
+            if (full_results[idx].gender === 'female' || full_results[idx].gender === 'mostly_female') {
+                results.female += 1;
+            }
+
+            if (full_results[idx].gender === 'andy') {
+                results.andy += 1;
+            }
+
+            if (full_results[idx].gender === 'unknown') {
+                results.gender_unknown += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pctwhite') {
+                results.white += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pctblack') {
+                results.black += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pctapi') {
+                results.api += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pctaian') {
+                results.aian += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pct2prace') {
+                results.multi += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'pcthispanic') {
+                results.hispanic += 1;
+            }
+
+            if (full_results[idx].ethnicity === 'race_unknown') {
+                results.race_unknown += 1;
+            }
+        }
+
         var gender_data = google.visualization.arrayToDataTable([
             ['Gender', 'Count'],
-            ['Likely Male', results.male + results.mostly_male],
+            ['Likely Male', results.male],
             ['Hard to Tell', results.andy],
-            ['Likely Female', results.female + results.mostly_female],
-            ['Unable to Determine', results.unknown]
+            ['Likely Female', results.female],
+            ['Unable to Determine', results.gender_unknown]
         ]);
 
         var gender_options = {
@@ -207,12 +255,12 @@
 
         var ethnicity_data = google.visualization.arrayToDataTable([
             ['Ethnicity', 'Count'],
-            ['Likely White', results.pctwhite],
-            ['Likely Black', results.pctblack],
-            ['Likely Asian or Pacific Islander', results.pctapi],
-            ['Likely American Indian or Alaskan Native', results.pctaian],
-            ['Likely Multiple Races', results.pct2prace],
-            ['Likely Hispanic', results.pcthispanic],
+            ['Likely White', results.white],
+            ['Likely Black', results.black],
+            ['Likely Asian or Pacific Islander', results.api],
+            ['Likely American Indian or Alaskan Native', results.aian],
+            ['Likely Multiple Races', results.multi],
+            ['Likely Hispanic', results.hispanic],
             ['Unable to Determine', results.race_unknown]
         ]);
 
@@ -225,7 +273,8 @@
         ethnicity_chart.draw(ethnicity_data, ethnicity_options);
     }
 
-    function drawTable(results) {
+    function drawTable(full_results) {
+        let results = []
         // Clear table
         $("#full_table").empty()
 
@@ -243,58 +292,61 @@
             '<tbody>';
 
         // Clean up race and gender
-        for (let idx = 0; idx < results.most_likely_gender.length; idx++) {
-            if (results.most_likely_gender[idx] === 'male' || results.most_likely_gender[idx] === 'mostly_male') {
-                results.most_likely_gender[idx] = 'Likely Male';
-            } else if (results.most_likely_gender[idx] === 'female' || results.most_likely_gender[idx] === 'mostly_female') {
-                results.most_likely_gender[idx] = 'Likely Female';
-            } else if (results.most_likely_gender[idx] === 'unknown') {
-                results.most_likely_gender[idx] = 'Unable to Determine';
-            } else if (results.most_likely_gender[idx] === 'andy') {
-                results.most_likely_gender[idx] = 'Hard to Tell';
+        for (let idx = 0; idx < full_results.length; idx++) {
+            results[idx] = {};
+            results[idx].first = full_results[idx].first
+            results[idx].last = full_results[idx].last
+            if (full_results[idx].gender === 'male' || full_results[idx].gender === 'mostly_male') {
+                results[idx].gender = 'Likely Male';
+            } else if (full_results[idx].gender === 'female' || full_results[idx].gender === 'mostly_female') {
+                results[idx].gender = 'Likely Female';
+            } else if (full_results[idx].gender === 'unknown') {
+                results[idx].gender = 'Unable to Determine';
+            } else if (full_results[idx].gender === 'andy') {
+                results[idx].gender = 'Hard to Tell';
             }
         }
-        for (let idx = 0; idx < results.most_likely_race.length; idx++) {
-            if (results.most_likely_race[idx] === 'pctwhite') {
-                results.most_likely_race[idx] = 'Likely White';
-            } else if (results.most_likely_race[idx] === 'pctblack') {
-                results.most_likely_race[idx] = 'Likely Black';
-            } else if (results.most_likely_race[idx] === 'pctapi') {
-                results.most_likely_race[idx] = 'Likely Asian or Pacific Islander';
-            } else if (results.most_likely_race[idx] === 'pctaian') {
-                results.most_likely_race[idx] = 'Likely American Indian or Alaskan Native';
-            } else if (results.most_likely_race[idx] === 'pct2prace') {
-                results.most_likely_race[idx] = 'Likely Multiple Races';
-            } else if (results.most_likely_race[idx] === 'pcthispanic') {
-                results.most_likely_race[idx] = 'Likely Hispanic';
-            } else if (results.most_likely_race[idx] === 'race_unknown') {
-                results.most_likely_race[idx] = 'Unable to Determine';
+        for (let idx = 0; idx < full_results.length; idx++) {
+            if (full_results[idx].ethnicity === 'pctwhite') {
+                results[idx].ethnicity = 'Likely White';
+            } else if (full_results[idx].ethnicity === 'pctblack') {
+                results[idx].ethnicity = 'Likely Black';
+            } else if (full_results[idx].ethnicity === 'pctapi') {
+                results[idx].ethnicity = 'Likely Asian or Pacific Islander';
+            } else if (full_results[idx].ethnicity === 'pctaian') {
+                results[idx].ethnicity = 'Likely American Indian or Alaskan Native';
+            } else if (full_results[idx].ethnicity === 'pct2prace') {
+                results[idx].ethnicity = 'Likely Multiple Races';
+            } else if (full_results[idx].ethnicity === 'pcthispanic') {
+                results[idx].ethnicity = 'Likely Hispanic';
+            } else if (full_results[idx].ethnicity === 'race_unknown') {
+                results[idx].ethnicity = 'Unable to Determine';
             }
         }
 
         // Make table contents
-        for (let idx = 0; idx < results.last_name.length; idx++) {
+        for (let idx = 0; idx < results.length; idx++) {
             let race_cell_class = 'default';
             let gender_cell_class = 'default';
-            if (results.most_likely_gender[idx] === 'Unable to Determine') {
+            if (results[idx].gender === 'Unable to Determine') {
                 gender_cell_class ='table-warning';
             }
 
-            if (results.most_likely_race[idx] === 'Unable to Determine' ) {
+            if (results[idx].ethnicity === 'Unable to Determine' ) {
                 race_cell_class ='table-warning';
             }
 
-            if (results.most_likely_gender[idx] === 'Unable to Determine' && results.most_likely_race[idx] === 'Unable to Determine' ) {
+            if (results[idx].gender === 'Unable to Determine' && results[idx].ethnicity === 'Unable to Determine' ) {
                 race_cell_class ='table-danger';
                 gender_cell_class ='table-danger';
             }
 
                 table = table + '<tr class="default">' +
                 '<th scope="row">' + (idx+1) + '</th>' +
-                '<td>' + results.first_name[idx] + '</td>' +
-                '<td>' + results.last_name[idx] + '</td>' +
-                '<td class="' + race_cell_class + '">' + results.most_likely_race[idx] + '</td>' +
-                '<td class="' + gender_cell_class + '">' + results.most_likely_gender[idx] + '</td>' +
+                '<td>' + results[idx].first + '</td>' +
+                '<td>' + results[idx].last + '</td>' +
+                '<td class="' + race_cell_class + '">' + results[idx].ethnicity + '</td>' +
+                '<td class="' + gender_cell_class + '">' + results[idx].gender + '</td>' +
                 '</tr>'
         }
 
@@ -319,11 +371,10 @@
         recs = recs + "</ul>"
 
         $("#recommendations").append(recs);
-
-
     }
 
     function get_data(event) {
+        full_results = []
         $('body').addClass('busy');
         $('#submit').prop('disabled', true);
 
@@ -334,62 +385,62 @@
 
         let url_to_call = ''
         if (location.hostname === "localhost") {
-            url_to_call = 'http://localhost:7071/api/HttpTrigger1';
+            url_to_call = 'http://localhost:7071/api/HttpTrigger2';
         } else {
-            url_to_call = 'https://cite-diversely.azurewebsites.net/api/HttpTrigger1?code=zAcXELp0HdNQ0b2opMuc//d5CjTu297bQU2dyJnYaIYdaYDP3XVipg==';
+            url_to_call = 'https://cite-diversely.azurewebsites.net/api/HttpTrigger2?code=5l5c0c5WFafrCPDnG8GhpYlzeMx8FGfkFO9ratBkzh9KpP31UDmgfQ==';
         }
 
-        $.ajax({
-            url: url_to_call,
-            type: "POST",
-            // data: '{name: "' + abstract + '"}',
-            data: abstract,
-            success: function (results) {
-                $('#submit').prop('disabled', false);
-                $('body').removeClass('busy');
+        $("#gender_piechart").height(400);
+        $("#ethnicity_piechart").height(400);
 
-                $("#thetool").prepend("<div class=\"alert alert-success alert-dismissible fixed-top\">\n" +
-                    "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Success!</strong> Your bibtex has been evaluated.\n" +
-                    "  </div>");
+        $('html, body').animate({
+            scrollTop: $('#gender_piechart').offset().top
+        }, 500);
 
-                window.setTimeout(function() {
-                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                        $(this).remove();
-                    });
-                }, 2000);
+        // Extract authors
+        let authors = abstract.match(/author\s*=\s*{.*}/gi)
 
-                $("#gender_piechart").height(400);
-                $("#ethnicity_piechart").height(400);
 
-                $('html, body').animate({
-                    scrollTop: $('#gender_piechart').offset().top
-                }, 500);
+        for (let idx = 0;  idx < authors.length; idx++ ) {
+            let author_list = authors[idx].split(" and ");
 
-                console.log(results)
+            for (let jdx = 0; jdx < author_list.length; jdx++) {
 
-                drawCharts(results);
-                drawTable(results);
-                // makeRecommendations(results);
-            },
-            error: function (results) {
-                $('#submit').prop('disabled', false);
-                $('body').removeClass('busy');
+                let this_author = author_list[jdx].replaceAll("}", "").replace(/author\s*=\s*{/i, "").replaceAll("{", "")
 
-                $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible fixed-top\">\n" +
-                    "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
-                    "    <strong>Oops!</strong> Something went wrong.\n<code>" + JSON.stringify(results) + "</code>" +
-                    "  </div>");
+                $.ajax({
+                    url: url_to_call,
+                    type: "POST",
+                    data: this_author,
+                    success: function (results) {
+                        $('#submit').prop('disabled', false);
+                        $('body').removeClass('busy');
 
-                window.setTimeout(function() {
-                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                        $(this).remove();
-                    });
-                }, 10000);
+                        console.log(results)
+
+                        full_results.push(results)
+
+                        drawCharts(full_results);
+                        drawTable(full_results);
+                    },
+                    error: function (results) {
+                        $('#submit').prop('disabled', false);
+                        $('body').removeClass('busy');
+
+                        $("#thetool").prepend("<div class=\"alert alert-danger alert-dismissible fixed-top\">\n" +
+                            "    <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" +
+                            "    <strong>Oops!</strong> Something went wrong.\n<code>" + JSON.stringify(results) + "</code>" +
+                            "  </div>");
+
+                        window.setTimeout(function () {
+                            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                $(this).remove();
+                            });
+                        }, 10000);
+                    }
+                });
             }
-        });
-
-
+        }
 
 
     }
