@@ -157,6 +157,20 @@
 
 
 <script>
+    // Bogus ajax call to warm up the server
+    let url_to_call = ''
+    if (location.hostname === "localhost") {
+        url_to_call = 'http://localhost:7071/api/HttpTrigger2';
+    } else {
+        url_to_call = 'https://cite-diversely.azurewebsites.net/api/HttpTrigger2?code=5l5c0c5WFafrCPDnG8GhpYlzeMx8FGfkFO9ratBkzh9KpP31UDmgfQ==';
+    }
+
+    $.ajax({
+        url: url_to_call,
+        type: "POST",
+        data: "Chris McComb"
+    });
+
 
     let full_results = [];
 
@@ -383,7 +397,7 @@
         // Get the details
         let abstract = $("#abstract").val();
 
-        let url_to_call = ''
+        let url_to_call = '';
         if (location.hostname === "localhost") {
             url_to_call = 'http://localhost:7071/api/HttpTrigger2';
         } else {
