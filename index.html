@@ -28,27 +28,6 @@
 </head>
 <body data-spy="scroll" data-target=".navpills" data-offset="100">
 
-<!--<nav class="navpills nav-justified sticky-top navbar-expand-lg navbar-dark bg-dark">-->
-<!--        <ul class="navbar-nav mr-auto justify-content-center">-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#home">Home</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#why">Why?</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#thetool">Estimate</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#faq">FAQ</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#contribute">Contribute</a>-->
-<!--            </li>-->
-
-<!--        </ul>-->
-<!--</nav>-->
-
 <div id="home" class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Cite Diversely</h1>
@@ -81,19 +60,62 @@
             Submit
         </button>
     </form>
+</div>
 
-    <div class="row">
-        <div id="gender_piechart" class="col"></div>
+<div class="container mt-5 mb-5" id="theresults">
+    <h2>Results</h2>
+    <div id="accordionresults">
+
+        <div class="card">
+            <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="#collapseOneResults">
+                    Overall Estimated Diversity
+                </a>
+            </div>
+            <div id="collapseOneResults" class="collapse d-none">
+                <div class="card-body">
+                    <div class="row">
+                        <div id="gender_piechart" class="col"></div>
+                    </div>
+                    <div class="row">
+                        <div id="ethnicity_piechart" class="col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="#collapseTwoResults">
+                    Recommendations
+                </a>
+            </div>
+            <div id="collapseTwoResults" class="collapse d-none">
+                <div class="card-body">
+                    <div class="row">
+                        <div id="recommendations" class="col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="#collapseThreeResults">
+                    Detailed Results
+                </a>
+            </div>
+            <div id="collapseThreeResults" class="collapse d-none">
+                <div class="card-body">
+                    <div class="row">
+                        <div id="full_table" class="col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="row">
-        <div id="ethnicity_piechart" class="col"></div>
-    </div>
-    <div class="row">
-        <div id="full_table" class="col"></div>
-    </div>
-    <div class="row">
-        <div id="recommendations" class="col"></div>
-    </div>
+
 </div>
 
 <div id="faq" class="container mt-5 mb-5">
@@ -139,7 +161,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
@@ -404,11 +425,14 @@
             url_to_call = 'https://cite-diversely.azurewebsites.net/api/HttpTrigger2?code=5l5c0c5WFafrCPDnG8GhpYlzeMx8FGfkFO9ratBkzh9KpP31UDmgfQ==';
         }
 
+
+        $(".d-none").removeClass("d-none").removeClass("disabled");
+        $("#collapseOneResults").collapse('show');
         $("#gender_piechart").height(400);
         $("#ethnicity_piechart").height(400);
 
         $('html, body').animate({
-            scrollTop: $('#gender_piechart').offset().top
+            scrollTop: $('#theresults').offset().top
         }, 500);
 
         // Extract authors
